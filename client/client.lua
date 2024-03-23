@@ -1,7 +1,7 @@
 local PlayerData = {}
 local Framework = Config.Framework
 
-Framework = "esx"
+if Framework == "esx" then
     RegisterNetEvent('esx:playerLoaded')
     AddEventHandler('esx:playerLoaded', function(xPlayer)
         PlayerData = xPlayer
@@ -12,7 +12,29 @@ Framework = "esx"
         PlayerData.job = job
     end)
 
+elseif Framework == "qbcore" then
+    local QBCore = exports['qb-core']:GetCoreObject()
+
+    CreateThread(function()
+        while QBCore == nil do
+            Wait(0)
+        end
+
+        while QBCore.Functions.GetPlayerData().job == nil do
+            Wait(10)
+        end
+
+        PlayerData = QBCore.Functions.GetPlayerData()
+    end)
+
+    RegisterNetEvent('QBCore:Client:OnJobUpdate')
+    AddEventHandler('QBCore:Client:OnJobUpdate', function(jobInfo)
+        PlayerData.job = jobInfo
+    end)
+end
+
 RegisterCommand(Config.PanicCommand, function() 
+    print("te")
     if Config.AllowCommand then
         local ped = PlayerPedId() 
         RequestAnimDict("random@arrests")    
@@ -21,11 +43,12 @@ RegisterCommand(Config.PanicCommand, function()
         end  
         TaskPlayAnim(ped, "random@arrests", "generic_radio_chatter", 8.0, 2.5, -1, 49, 0, 0, 0, 0)
         SetCurrentPedWeapon(ped, GetHashKey("GENERIC_RADIO_CHATTER"), true)
+
         lib.notify({
             id = 'PanicButton',
             title = 'YOUR PANIC BUTTON ACTIVATED',
-            description = 'Your panic button has been activated!',
-            position = 'top',
+            description = 'Your panic was activated!',
+            position = 'top-left',
             icon = 'fa-solid fa-user',
             type = 'error',
         })
@@ -33,14 +56,11 @@ RegisterCommand(Config.PanicCommand, function()
         TriggerServerEvent('panicButton:syncPosition', playerCoords)
         Wait(1000)  
         ClearPedTasks(ped)
-    else
-        ShowNotification('~r~' ..Config.CommandNotAllowed, 5000)
     end
 end)
 
 RegisterNetEvent('panicbutton:sendCoords')
 AddEventHandler('panicbutton:sendCoords', function()
-    print("hee")
     local ped = PlayerPedId()
     RequestAnimDict("random@arrests")
     while (not HasAnimDictLoaded("random@arrests")) do
@@ -56,9 +76,6 @@ end)
 
 RegisterNetEvent('panicButton:alarm')
 AddEventHandler('panicButton:alarm', function(playername, pos)
-    if Config.ShowNotification then 
-        notification(Config.NotificationText)
-    end
 
     Wait(1000) 
     ClearPedTasks(ped)
@@ -67,7 +84,7 @@ AddEventHandler('panicButton:alarm', function(playername, pos)
         id = 'PanicButton',
         title = 'PANIC BUTTON ACTIVATED',
         description = 'Officer is in danger! Needs immediate help!',
-        position = 'top',
+        position = 'top-left',
         icon = 'fa-solid fa-user',
         type = 'error',
         duration = "700"
@@ -77,8 +94,6 @@ AddEventHandler('panicButton:alarm', function(playername, pos)
         PayloadType = {"Panic", "ExternalPanic"}, 
         Payload = PlayerId() 
     })
-
-    -- Blip
 
     local Blip = AddBlipForRadius(pos.x, pos.y, pos.z, 160.0)
     SetBlipRoute(Blip, true)
@@ -109,5 +124,9 @@ end)
 
 RegisterNetEvent('panicButton:error')
 AddEventHandler('panicButton:error', function()
-    ShowNotification(Config.NotAllowedNotification)
+    lib.notify({
+        title = 'Panic Button',
+        description = 'Error just occurred!',
+        type = 'error'
+    })
 end) 
