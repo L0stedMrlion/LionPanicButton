@@ -23,4 +23,5 @@ client_scripts {
 files {
 	"assets/sounds/localpanic.ogg",
     "assets/sounds/externalpanic1.ogg",
+    "assets/index.html",
 }
