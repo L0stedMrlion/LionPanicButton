@@ -1,5 +1,5 @@
 fx_version 'cerulean'
-games  'gta5'
+game 'gta5'
 name "lion_panic"
 author 'Mrlion'
 description "Lion's Panic button for LEO, EMS and more!"
@@ -21,6 +21,6 @@ client_scripts {
 --}
 
 files {
-	"html/index.html",
-	"html/sounds/*.ogg",
+	"assets/sounds/localpanic.ogg",
+    "assets/sounds/externalpanic1.ogg",
 }
