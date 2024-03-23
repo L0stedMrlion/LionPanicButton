@@ -34,7 +34,11 @@ RegisterCommand(Config.PanicCommand, function()
         Wait(1000)  
         ClearPedTasks(ped)
     else
-        ShowNotification('~r~' ..Config.CommandNotAllowed, 5000)
+        lib.notify({
+            title = 'PANIC BUTTON',
+            description = 'You dont have permission to use panic!',
+            type = 'error'
+        })
     end
 end)
 
@@ -56,9 +60,6 @@ end)
 
 RegisterNetEvent('panicButton:alarm')
 AddEventHandler('panicButton:alarm', function(playername, pos)
-    if Config.ShowNotification then 
-        notification(Config.NotificationText)
-    end
 
     Wait(1000) 
     ClearPedTasks(ped)
@@ -107,5 +108,9 @@ end)
 
 RegisterNetEvent('panicButton:error')
 AddEventHandler('panicButton:error', function()
-    ShowNotification(Config.NotAllowedNotification)
+    lib.notify({
+        title = 'PANIC BUTTON',
+        description = 'You dont have permission to use panic!',
+        type = 'error'
+    })
 end) 

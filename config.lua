@@ -8,5 +8,7 @@ Config.Jobs = {
     "ambulance",
 } 
 
+Config.PanicCommand = 'panic'
+
 Config.BlipName = "Panic Button"
 Config.BlipDuration = "30" -- IN SECONDS
