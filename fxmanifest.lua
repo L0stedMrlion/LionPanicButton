@@ -16,9 +16,9 @@ client_scripts {
     'client/client.lua'
 }
 
-server_scripts {
-    'server/server.lua',
-}
+--server_scripts {
+   -- 'server/server.lua',
+--}
 
 files {
 	"html/index.html",

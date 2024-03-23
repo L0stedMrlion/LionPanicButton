@@ -91,14 +91,19 @@ end)
 
 RegisterNetEvent('panicButton:alarm')
 AddEventHandler('panicButton:alarm', function(playername, pos)
-    if Config.ShowNotification then 
-        notification(Config.NotificationText)
-    end
 
     Wait(1000) 
     ClearPedTasks(ped)
 
-    ShowNotification(playername, Config.SenderNotification)
+    lib.notify({
+        id = 'PanicButton',
+        title = 'PANIC BUTTON ACTIVATED',
+        description = 'Officer is in danger! Needs immediate help!',
+        position = 'top',
+        icon = 'fa-solid fa-user',
+        type = 'error',
+        duration = "500"
+    })
 
     SendNUIMessage({
         PayloadType = {"Panic", "ExternalPanic"}, 
