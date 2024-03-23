@@ -9,4 +9,4 @@ Config.Jobs = {
 } 
 
 Config.BlipName = "Panic Button"
-Config.BlipDuration = "30"
+Config.BlipDuration = "30" -- IN SECONDS

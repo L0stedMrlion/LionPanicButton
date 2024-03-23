@@ -73,3 +73,34 @@ Wait(Config.BlipTime * 1000)
 RemoveBlip(Blip)
 Blip = nil
 end
+
+RegisterNetEvent('panicbutton:sendCoords')
+AddEventHandler('panicbutton:sendCoords', function()
+    local ped = PlayerPedId()
+    RequestAnimDict("random@arrests")
+    while (not HasAnimDictLoaded("random@arrests")) do
+        Wait(100)
+    end
+    TaskPlayAnim(ped, "random@arrests", "generic_radio_chatter", 8.0, 2.5, -1, 49, 0, 0, 0, 0)
+    SetCurrentPedWeapon(ped, GetHashKey("GENERIC_RADIO_CHATTER"), true)
+    local playerCoords = GetEntityCoords(PlayerPedId())
+    TriggerServerEvent('panicButton:syncPosition', playerCoords)
+    Wait(1000) 
+    ClearPedTasks(ped) 
+end)
+
+RegisterNetEvent('panicButton:alarm')
+AddEventHandler('panicButton:alarm', function(playername, pos)
+    if Config.ShowNotification then 
+        notification(Config.NotificationText)
+    end
+
+    Wait(1000) 
+    ClearPedTasks(ped)
+
+    ShowNotification(playername, Config.SenderNotification)
+
+    SendNUIMessage({
+        PayloadType = {"Panic", "ExternalPanic"}, 
+        Payload = PlayerId() 
+    })
