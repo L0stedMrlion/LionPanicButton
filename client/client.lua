@@ -1,7 +1,7 @@
 local PlayerData = {}
-local Framework = Config.Frameworkg
+local Framework = Config.Framework
 
-if Framework == "esx" then
+Framework = "esx"
     RegisterNetEvent('esx:playerLoaded')
     AddEventHandler('esx:playerLoaded', function(xPlayer)
         PlayerData = xPlayer
@@ -11,27 +11,6 @@ if Framework == "esx" then
     AddEventHandler('esx:setJob', function(job)
         PlayerData.job = job
     end)
-
-elseif Framework == "qbcore" then
-    local QBCore = exports['qb-core']:GetCoreObject()
-
-    CreateThread(function()
-        while QBCore == nil do
-            Wait(0)
-        end
-
-        while QBCore.Functions.GetPlayerData().job == nil do
-            Wait(10)
-        end
-
-        PlayerData = QBCore.Functions.GetPlayerData()
-    end)
-
-    RegisterNetEvent('QBCore:Client:OnJobUpdate')
-    AddEventHandler('QBCore:Client:OnJobUpdate', function(jobInfo)
-        PlayerData.job = jobInfo
-    end)
-end
 
 RegisterCommand(Config.PanicCommand, function() 
     if Config.AllowCommand then
@@ -55,11 +34,7 @@ RegisterCommand(Config.PanicCommand, function()
         Wait(1000)  
         ClearPedTasks(ped)
     else
-        lib.notify({
-            title = 'PANIC BUTTON',
-            description = "You don't have permission to use panic!",
-            type = 'error'
-        })
+        ShowNotification('~r~' ..Config.CommandNotAllowed, 5000)
     end
 end)
 
@@ -81,6 +56,9 @@ end)
 
 RegisterNetEvent('panicButton:alarm')
 AddEventHandler('panicButton:alarm', function(playername, pos)
+    if Config.ShowNotification then 
+        notification(Config.NotificationText)
+    end
 
     Wait(1000) 
     ClearPedTasks(ped)
@@ -99,6 +77,8 @@ AddEventHandler('panicButton:alarm', function(playername, pos)
         PayloadType = {"Panic", "ExternalPanic"}, 
         Payload = PlayerId() 
     })
+
+    -- Blip
 
     local Blip = AddBlipForRadius(pos.x, pos.y, pos.z, 160.0)
     SetBlipRoute(Blip, true)
@@ -129,4 +109,5 @@ end)
 
 RegisterNetEvent('panicButton:error')
 AddEventHandler('panicButton:error', function()
+    ShowNotification(Config.NotAllowedNotification)
 end) 

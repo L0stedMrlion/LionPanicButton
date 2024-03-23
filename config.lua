@@ -1,14 +1,29 @@
 Config = {}
 
-Config.Framework = "esx" -- ESX/QB
+Config.Framework = "esx"
 
 Config.Jobs = {
     "police",
     "sheriff",
-    "ambulance",
 } 
 
-Config.PanicCommand = 'panic'
+Config.BlipTime =  50
+Config.Blipname = "Panic Button"
 
-Config.BlipName = "Panic Button"
-Config.BlipDuration = "30" -- IN SECONDS
+
+Config.SenderNotification = 'Needs immediate assistance!'
+Config.NotAllowedNotification = 'Youre not allowed to use the panicbutton!'
+Config.ShowNotification = false
+Config.NotificationTitle = '10-99'
+Config.NotificationText = ' Officer Triggered a Panic'
+Config.NotificationTime = 30
+-- Item 
+Config.UseItem = false
+Config.ItemName = 'panicbutton'
+Config.ItemNotAllowed = "Item using disabled"
+
+Config.Defaultkey = "0" 
+Config.AllowKeyboardTrigger = true
+Config.AllowCommand = true
+Config.PanicCommand = 'panic'
+Config.CommandNotAllowed = 'Command is disabled'

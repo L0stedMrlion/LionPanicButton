@@ -1,8 +1,7 @@
 fx_version 'cerulean'
-game 'gta5'
-name "lion_panic"
+games  { 'gta5' }
 author 'Mrlion'
-description "Lion's Panic button for LEO, EMS and more!"
+description "Lion's Panic button"
 version '1.0'
 lua54 'yes'
 
@@ -16,12 +15,10 @@ client_scripts {
     'client/client.lua'
 }
 
---server_scripts {
-   -- 'server/server.lua',
---}
+ui_page "html/index.html"
 
 files {
-	"assets/sounds/localpanic.ogg",
-    "assets/sounds/externalpanic1.ogg",
-    "assets/index.html",
+	"html/index.html",
+	"html/sounds/externalpanic1.ogg",
+    "html/sounds/localpanic.ogg",
 }
