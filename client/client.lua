@@ -1,7 +1,7 @@
 local PlayerData = {}
-local Framework = Config.Framework
+local Framework = Config.Frameworkg
 
-Framework = "esx"
+if Framework == "esx" then
     RegisterNetEvent('esx:playerLoaded')
     AddEventHandler('esx:playerLoaded', function(xPlayer)
         PlayerData = xPlayer
@@ -11,6 +11,27 @@ Framework = "esx"
     AddEventHandler('esx:setJob', function(job)
         PlayerData.job = job
     end)
+
+elseif Framework == "qbcore" then
+    local QBCore = exports['qb-core']:GetCoreObject()
+
+    CreateThread(function()
+        while QBCore == nil do
+            Wait(0)
+        end
+
+        while QBCore.Functions.GetPlayerData().job == nil do
+            Wait(10)
+        end
+
+        PlayerData = QBCore.Functions.GetPlayerData()
+    end)
+
+    RegisterNetEvent('QBCore:Client:OnJobUpdate')
+    AddEventHandler('QBCore:Client:OnJobUpdate', function(jobInfo)
+        PlayerData.job = jobInfo
+    end)
+end
 
 RegisterCommand(Config.PanicCommand, function() 
     if Config.AllowCommand then
@@ -36,7 +57,7 @@ RegisterCommand(Config.PanicCommand, function()
     else
         lib.notify({
             title = 'PANIC BUTTON',
-            description = 'You dont have permission to use panic!',
+            description = "You don't have permission to use panic!",
             type = 'error'
         })
     end
@@ -108,9 +129,4 @@ end)
 
 RegisterNetEvent('panicButton:error')
 AddEventHandler('panicButton:error', function()
-    lib.notify({
-        title = 'PANIC BUTTON',
-        description = 'You dont have permission to use panic!',
-        type = 'error'
-    })
 end) 
